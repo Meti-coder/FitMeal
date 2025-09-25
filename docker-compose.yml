@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:15
+    container_name: fitmeal-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: fitmeal_db
+      POSTGRES_USER: fitmeal_user
+      POSTGRES_PASSWORD: fitmeal_pass
+    ports:
+      - "5433:5432"   # host port 5433 → container 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - s-networks
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: fitmeal-pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"    # host port 5050 → container 80
+    depends_on:
+      - postgres-db
+    networks:
+      - s-networks
+
+  spring-app:
+    image: kanakadev/fitrepo
+    container_name: fitmeal-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/fitmeal_db
+      SPRING_DATASOURCE_USERNAME: fitmeal_user
+      SPRING_DATASOURCE_PASSWORD: fitmeal_pass
+    depends_on:
+      - postgres-db
+    networks:
+      - s-networks
+
+volumes:
+  postgres_data:
+
+networks:
+  s-networks:
+    driver: bridge
