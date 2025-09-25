@@ -13,4 +13,6 @@ public class MuruController {
 
 
     String n;
+
+    String c;
 }
