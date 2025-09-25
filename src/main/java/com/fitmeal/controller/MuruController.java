@@ -10,4 +10,7 @@ public class MuruController {
     String age;
 
 
+
+
+    String n;
 }
