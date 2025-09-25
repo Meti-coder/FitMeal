@@ -2,10 +2,13 @@ package com.fitmeal.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "product_img")
 public class ProductImg {
     @Id
@@ -17,6 +20,8 @@ public class ProductImg {
 
     @OneToOne
     @JoinColumn(name = "product_id")
-    @JsonIgnore // prevent recursion
+    @JsonIgnore // prevent recursion in JSON
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Product product;
 }

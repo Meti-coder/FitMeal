@@ -32,7 +32,7 @@ services:
       - s-networks
 
   spring-app:
-    image: kanakadev/fitrepo
+    image: kanakadev/fitmealdev:latest
     container_name: fitmeal-backend
     restart: always
     ports:
